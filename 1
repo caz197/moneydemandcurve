@@ -1,0 +1,30 @@
+library(ggplot2)
+# Define parameters
+md_slope <- -0.5 # slope of money demand curve
+ms1 <- 1000 # initial money supply
+ms2 <- 800 # final money supply
+i1 <- 2 # initial interest rate
+i2 <- 4 # final interest rate
+q1 <- ms1 # initial quantity of money
+q2 <- ms2 # final quantity of money
+# Define functions
+md <- function(i) {
+  q1 - md_slope * i1 + md_slope * i
+} # money demand function
+ms <- function(q) {
+  q
+} # money supply function (constant)
+# Plot the diagram
+ggplot(data.frame(x = c(0, 1200)), aes(x = x)) +
+  geom_line(aes(y = md(x)), color = "blue", size = 1) +
+  geom_line(aes(y = ms(x)), color = "red", size = 1, linetype = "dashed") +
+  geom_line(aes(y = ms(x)), color = "red", size = 1, linetype = "dashed", xintercept = ms2) +
+  geom_segment(aes(x = q1, y = i1, xend = q2, yend = i1), color = "black", size = 0.5) +
+  geom_segment(aes(x = q2, y = i1, xend = q2, yend = i2), color = "black", size = 0.5) +
+  geom_point(aes(x = q1, y = i1), color = "black", size = 3) +
+  geom_point(aes(x = q2, y = i2), color = "black", size = 3) +
+  annotate("text", x = q1 + 50, y = i1 - 0.1, label = "E1", size = 5) +
+  annotate("text", x = q2 + 50, y = i2 - 0.1, label = "E2", size = 5) +
+  scale_x_continuous(name = "Quantity of Money", breaks = seq(0, 1200, by = 200), limits = c(0, 1200)) +
+  scale_y_continuous(name = "Nominal Interest Rate", breaks = seq(0, 6, by = 1), limits = c(0, 6)) +
+  theme_bw()
